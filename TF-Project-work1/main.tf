@@ -64,6 +64,14 @@ resource "aws_security_group" "sg" {
   }
 
   ingress {
+    description = "container-app"
+    from_port   = 8000
+    to_port     = 8010
+    protocol    = "tcp"
+    cidr_blocks = var.allowed_cidrs
+  }
+
+  ingress {
     description = "HTTPS"
     from_port   = 443
     to_port     = 443
