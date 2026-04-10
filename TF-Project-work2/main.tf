@@ -163,8 +163,7 @@ resource "null_resource" "provisioner" {
       "sudo chmod +x /usr/local/bin/minikube",
       "sudo yum install java-17-amazon-corretto java-17-amazon-corretto-devel -y",
       "java -version",
-      "mkdir -p /home/ec2-user/.ssh",
-      "chmod 700 /home/ec2-user/.ssh"
+      "sudo yum install git -y"
     ]
 
     connection {
