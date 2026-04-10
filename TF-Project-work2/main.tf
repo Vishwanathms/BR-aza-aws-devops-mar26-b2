@@ -1,12 +1,12 @@
 resource "aws_key_pair" "jenkins_key" {
   key_name   = var.key_name
-  public_key = file("${path.module}/jenkins_master.pub")
+  public_key = file("${var.private_key_path}/id_rsa.pub")
 }
 terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
     }
     tls = {
       source  = "hashicorp/tls"
@@ -170,7 +170,7 @@ resource "null_resource" "provisioner" {
     connection {
       type        = "ssh"
       user        = "ec2-user"
-      private_key = file(var.private_key_path)
+      private_key = file("${var.private_key_path}/id_rsa")
       host        = aws_instance.ec2.public_ip
     }
   }
@@ -227,12 +227,12 @@ output "ecr_repository_url" {
 }
 
 # Output Jenkins node info
-output "jenkins_node_info" {
-  value = {
-    node_ip       = aws_instance.ec2.public_ip
-    node_user     = "ec2-user"
-    java_version  = "17"
-    jenkins_user  = "ec2-user"
-    node_home     = "/home/ec2-user"
-  }
-}
+# output "jenkins_node_info" {
+#   value = {
+#     node_ip       = aws_instance.ec2.public_ip
+#     node_user     = "ec2-user"
+#     java_version  = "17"
+#     jenkins_user  = "ec2-user"
+#     node_home     = "/home/ec2-user"
+#   }
+# }
