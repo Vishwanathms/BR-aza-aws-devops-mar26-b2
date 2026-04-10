@@ -176,44 +176,44 @@ resource "null_resource" "provisioner" {
   }
 }
 
-# Jenkins Node Setup
-resource "null_resource" "jenkins_node_setup" {
-  depends_on = [null_resource.provisioner]
+# # Jenkins Node Setup
+# resource "null_resource" "jenkins_node_setup" {
+#   depends_on = [null_resource.provisioner]
 
-  # Copy Jenkins master public key to authorized_keys
-  provisioner "file" {
-    source      = "${path.module}/jenkins_master.pub"
-    destination = "/tmp/jenkins_master.pub"
+#   # Copy Jenkins master public key to authorized_keys
+#   provisioner "file" {
+#     source      = "${path.module}/jenkins_master.pub"
+#     destination = "/tmp/jenkins_master.pub"
 
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      private_key = file(var.private_key_path)
-      host        = aws_instance.ec2.public_ip
-    }
-  }
+#     connection {
+#       type        = "ssh"
+#       user        = "ec2-user"
+#       private_key = file(var.private_key_path)
+#       host        = aws_instance.ec2.public_ip
+#     }
+#   }
 
-  # Configure SSH and verify Java installation
-  provisioner "remote-exec" {
-    inline = [
-      "echo 'Setting up Jenkins node...'",
-      "cat /tmp/jenkins_master.pub >> /home/ec2-user/.ssh/authorized_keys",
-      "chmod 600 /home/ec2-user/.ssh/authorized_keys",
-      "rm /tmp/jenkins_master.pub",
-      "echo 'Jenkins SSH key added'",
-      "java -version",
-      "docker --version",
-      "echo 'Jenkins node setup completed'"
-    ]
+#   # Configure SSH and verify Java installation
+#   provisioner "remote-exec" {
+#     inline = [
+#       "echo 'Setting up Jenkins node...'",
+#       "cat /tmp/jenkins_master.pub >> /home/ec2-user/.ssh/authorized_keys",
+#       "chmod 600 /home/ec2-user/.ssh/authorized_keys",
+#       "rm /tmp/jenkins_master.pub",
+#       "echo 'Jenkins SSH key added'",
+#       "java -version",
+#       "docker --version",
+#       "echo 'Jenkins node setup completed'"
+#     ]
 
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      private_key = file(var.private_key_path)
-      host        = aws_instance.ec2.public_ip
-    }
-  }
-}
+#     connection {
+#       type        = "ssh"
+#       user        = "ec2-user"
+#       private_key = file(var.private_key_path)
+#       host        = aws_instance.ec2.public_ip
+#     }
+#   }
+# }
 
 # Output the public IP
 output "instance_public_ip" {
